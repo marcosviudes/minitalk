@@ -3,23 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mviudes <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: mviudes <mviudes@student.42madrid.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/24 17:20:41 by mviudes           #+#    #+#             */
-/*   Updated: 2021/07/24 17:21:32 by mviudes          ###   ########.fr       */
+/*   Updated: 2021/07/29 14:46:46 by mviudes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <server.h>
 #include <minitalk.h>
 
+void decimalToBinary(int decimalnum)
+{
+    long binarynum = 0;
+    int rem, temp = 1;
+
+    while (decimalnum!=0)
+    {
+        rem = decimalnum%2;
+        decimalnum = decimalnum / 2;
+        binarynum = binarynum + rem*temp;
+        temp = temp * 10;
+    }
+    printf("binary: %li\n", binarynum);
+}
+
 typedef struct s_data
 {
-	char	recive_char;
-
+	char	recived_char;
+	int		num_bits;
 }			t_data;
 
 typedef t_data g_data;
+g_data	data;
 
 int	str_error(char const *error)
 {
@@ -37,29 +53,34 @@ void print_pid(void)
 
 void handler(int signum)
 {
-	static int number;
-
-/*	write(1, "HOLA BB ", ft_strlen("HOLA BB "));
-	ft_putnbr_fd(signum, 1);
-	ft_putnbr_fd(number, 1);
-	write(1, "\n", 1);*/
-	if(signum == SIGUSR2)
-		write(1, "1", 1);
-	else if (signum == SIGUSR1)
-		write(1, "\n", 1);
-	else
-		write(1, "0", 1);
+	if(data.num_bits == 7)
+	{
+		decimalToBinary((int)data.num_bits);
+		ft_putchar_fd(data.recived_char, 1);
+		data.num_bits = 0;
+		return;
+	}
+//	if(signum == SIGUSR1)
+		data.recived_char += (1 << data.num_bits);
+//		data.recived_char |= 1 << data.num_bits;
+/*	else if (signum == SIGUSR2)
+		data.recived_char |= 0 << data.num_bits;*/
+	printf("%d\n", data.num_bits);
+	data.num_bits++;
 }
 /*
 char *decode_bin()
 {
 
 }*/
+g_data	data;
 
 int main(int argc, char *argv[])
 {
 	(void)argv;
 
+	data.num_bits = 0;
+	data.recived_char = 0;
 	if(argc != 1)
 		return(str_error("This program don't recive arguments, try: ./server"));
 	print_pid();
