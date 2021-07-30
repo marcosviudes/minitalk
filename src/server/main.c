@@ -15,17 +15,10 @@
 
 void decimalToBinary(int decimalnum)
 {
-    long binarynum = 0;
-    int rem, temp = 1;
-
-    while (decimalnum!=0)
-    {
-        rem = decimalnum%2;
-        decimalnum = decimalnum / 2;
-        binarynum = binarynum + rem*temp;
-        temp = temp * 10;
-    }
-    printf("binary: %li\n", binarynum);
+	for (int i = 0; i < 8; i++) {
+      printf("%d", !!((decimalnum << i) & 0x80));
+  }
+  printf("\n");
 }
 
 typedef struct s_data
@@ -53,19 +46,27 @@ void print_pid(void)
 
 void handler(int signum)
 {
-	if(data.num_bits == 7)
-	{
-		decimalToBinary((int)data.num_bits);
-		ft_putchar_fd(data.recived_char, 1);
-		data.num_bits = 0;
-		return;
-	}
-//	if(signum == SIGUSR1)
-		data.recived_char += (1 << data.num_bits);
-//		data.recived_char |= 1 << data.num_bits;
+
+//		data.recived_char += (1 << data.num_bits);
+//		data.recived_char |= 1 << (data.num_bits + 1);
 /*	else if (signum == SIGUSR2)
 		data.recived_char |= 0 << data.num_bits;*/
-	printf("%d\n", data.num_bits);
+	//printf("%d\t", data.num_bits);
+	///decimalToBinary((int)data.recived_char);
+//	data.num_bits++;
+	if(data.num_bits == 7)
+	{
+		ft_putchar_fd(data.recived_char, 1);
+		//write(1, "\t", 1);
+		if(data.recived_char == '\0')
+			write(1, "\n", 1);
+		data.num_bits = 0;
+		data.recived_char = 0;
+	//	decimalToBinary(data.recived_char);
+		return;
+	}
+	if(signum == SIGUSR1)
+		data.recived_char |= (1 << data.num_bits);
 	data.num_bits++;
 }
 /*

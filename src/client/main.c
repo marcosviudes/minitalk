@@ -17,17 +17,10 @@
 
 void decimalToBinary(int decimalnum)
 {
-    long binarynum = 0;
-    int rem, temp = 1;
-
-    while (decimalnum!=0)
-    {
-        rem = decimalnum%2;
-        decimalnum = decimalnum / 2;
-        binarynum = binarynum + rem*temp;
-        temp = temp * 10;
-    }
-    printf("binary: %li\n", binarynum);
+	for (int i = 0; i < 8; i++) {
+      printf("%d", !!((decimalnum << i) & 0x80));
+  }
+  printf("\n");
 }
 
 int	str_error(char const *error)
@@ -51,40 +44,49 @@ void send_stirng(pid_t pid, char *messege, size_t len)
 	int		j;
 	
 	i = 0;
-	printf("%d, %s LEN:%i\n", pid, messege, (int)len);
-	printf("messege[0]:%d\n", messege[0]);
+//	printf("%d, %s LEN:%i\n", pid, messege, (int)len);
+//	printf("messege[0]:%d\n", messege[0]);
 	decimalToBinary((int)messege[0]);
-	while(i < len)
+	while(i < len + 1)
 	{
 
-		j = 8;
-		while(j--)
+		j = 0;
+		while(j < 8)
 		{
 			if((messege[i] >> j) & 1)
 			{
-				write(1, "1", 1);
+//				write(1, "1", 1);
 				kill(pid, SIGUSR1);
 			}
 			else
 			{
-				write(1, "0", 1);
+//				write(1, "0", 1);
 				kill(pid, SIGUSR2);
 			}
-			usleep(25);
+			usleep(1000);
+			j++;
 		}
+//		write(1, " ", 1);
 		i++;
 	}
-	write(1, "\n", 1);
+//	write(1, "\n", 1);
 }
 
+#include <time.h>
 int		main(int argc, char *argv[])
 {
 	pid_t pid;
+
+clock_t begin = clock();
+
 
 	if(!checkargs(argc, argv))
 		return(str_error("try: ./client [pid] [messege]\n"));
 	pid = ft_atoi(argv[1]);
 	printf("%d\n%s\n", pid, argv[2]);
 	send_stirng(pid, argv[2], ft_strlen(argv[2]));
+	clock_t end = clock();
+	double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+	printf("\n%f", time_spent);
 	return(0);
 }
