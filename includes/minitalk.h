@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   minitalk.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mviudes <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: mviudes <mviudes@student.42madrid.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/24 17:16:12 by mviudes           #+#    #+#             */
-/*   Updated: 2021/07/24 17:17:27 by mviudes          ###   ########.fr       */
+/*   Updated: 2021/08/07 14:07:04 by mviudes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINITALK_H
 # define MINITALK_H
 
-#include <libft.h>
+# include <libft.h>
 
 #endif

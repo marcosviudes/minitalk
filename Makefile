@@ -12,7 +12,7 @@ LIBFT_DIR	= ./libft
 LIBFT		= ./libft/libft.a
 
 CC 			= gcc
-CFLAGS		= #-Wall -Wextra -Werror -g3
+CFLAGS		= -Wall -Wextra -Werror -g3
 
 RM			= rm -rf
 MKDIR		= mkdir -p
@@ -23,7 +23,7 @@ CLIENT_DIR	= $(SRC_DIR)/client/
 UTILS_DIR	= $(SRC_DIR)/utils/
 
 SERVER_SRC	=	main.c
-CLIENT_SRC	=	main.c
+CLIENT_SRC	=	main.c ft_absatol.c
 TEST_SRC	=	$(SRC_DIR)/test/main.c
 
 SERVER_F 	= $(addprefix $(SERVER_DIR), $(SERVER_SRC))
@@ -42,7 +42,8 @@ INCLUDES	+= -I $(LIBFT_DIR)
 ### RULES
 #####################################
 
-all: $(SERVER) $(CLIENT)
+NAME: $(SERVER) $(CLIENT)
+all: $(NAME)
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(INCLUDES) -o $@ -c $^
@@ -51,7 +52,7 @@ $(LIBFT):
 	@make -C libft
 
 $(SERVER): $(LIBFT) $(SERVER_O) ./includes/server.h
-	$(CC) $(CFLAGS) $(INCLUDES) $(SERVER_O) $(LIBFT) -o $(SERVER)
+	$(CC) $(CFLAGS) $(INCLUDES) -O3 $(SERVER_O) $(LIBFT) -o $(SERVER)
 
 $(CLIENT): $(LIBFT) $(CLIENT_O) $(UTILS_O) ./includes/client.h
 	$(CC) $(CFLAGS) $(INCLUDES) $(CLIENT_O) $(LIBFT) -o $(CLIENT)
@@ -75,7 +76,9 @@ clean:
 fclean: clean
 	@make -C $(LIBFT_DIR) fclean
 	$(RM) $(SERVER) $(CLIENT) $(TEST)
-re: fclean all
+re:
+	@$(MAKE) fclean
+	@$(MAKE) all
 retest:
 	$(RM) test
 	make test
