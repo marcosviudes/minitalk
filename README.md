@@ -26,3 +26,4 @@ NO standard protocol used, it sends the strings bit by bit.
   
   ``re``: generate all again
   
+[![forthebadge](https://forthebadge.com/images/badges/made-with-c.svg)](https://forthebadge.com)
